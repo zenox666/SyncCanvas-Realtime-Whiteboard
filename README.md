@@ -17,6 +17,22 @@ It uses **WebSockets** to synchronize drawing data in real-time with sub-100ms l
 * **Cross-Device:** Works on Laptops, Tablets, and Mobile phones (with touch support).
 * **Clean Interface:** Distraction-free drawing area.
 
+## 📦 Dependencies
+
+Before running the project, ensure you have **Node.js** installed.
+
+### Backend Dependencies (`/server`)
+* **express**: Web framework for Node.js.
+* **socket.io**: Enables real-time, bidirectional communication.
+* **cors**: Middleware to enable Cross-Origin Resource Sharing (allows frontend to talk to backend).
+* **nodemon**: (Dev) Automatically restarts the server when code changes.
+
+### Frontend Dependencies (`/client`)
+* **socket.io-client**: Connects the React frontend to the Socket.io server.
+* **react** & **react-dom**: Core React libraries.
+
+---
+
 ## 🛠️ How to Run Locally
 
 This project is divided into two parts: `client` (Frontend) and `server` (Backend). You need to run both terminals simultaneously.
@@ -59,8 +75,10 @@ SyncCanvas/
 
 ---
 
-## Future Improvements:
+## Future Improvements
+There are a few things I plan to add to make this project even better:
 
-- Add color selection.
-- Implement "Undo" functionality.
-- Add a "Save as Image" button.
+* **Database Integration:** Currently, tasks are stored in memory. I plan to add **MongoDB** to save data permanently.
+* **User Accounts:** Implement **Firebase Auth** so users can have private boards.
+* **Mobile Touch Support:** Improve the drawing experience on smaller touchscreens.
+* **Color Picker:** Allow users to choose different brush colors and sizes.
