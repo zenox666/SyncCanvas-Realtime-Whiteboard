@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("https://sync-canvas-backend.onrender.com");
 
 function App() {
   const canvasRef = useRef(null);
