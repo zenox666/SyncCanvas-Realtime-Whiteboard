@@ -1,8 +1,6 @@
 # 🎨 SyncCanvas - Real-Time Collaborative Whiteboard
 
-```markdown
-    ![Project Demo](demo.png)
-```
+![Project Demo](demo.png)
 SyncCanvas is a web application that allows multiple users to draw on a shared whiteboard simultaneously. I built this project to solve the problem of explaining diagrams and concepts to friends while studying remotely.
 
 It uses **WebSockets** to synchronize drawing data in real-time with sub-100ms latency.
