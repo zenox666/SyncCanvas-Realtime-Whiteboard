@@ -1,4 +1,19 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build output
+client/build/
+
+# Environment
 .env
-client/node_modules
-server/node_modules
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
