@@ -1,19 +1,30 @@
 {
-  "name": "server",
+  "name": "sync-canvas-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Realtime Socket.io relay for the SyncCanvas collaborative whiteboard.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "keywords": [
+    "websockets",
+    "socket.io",
+    "whiteboard",
+    "realtime"
+  ],
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.2.1",
-    "nodemon": "^3.1.11",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
   }
 }
