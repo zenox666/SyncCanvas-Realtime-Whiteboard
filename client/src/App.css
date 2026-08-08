@@ -1,34 +1,368 @@
-.App {
-  text-align: center;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f0f2f5;
-  height: 100vh;
+/* ---------------------------------------------------------------------------
+   Design tokens
+   --------------------------------------------------------------------------- */
+:root {
+  --surface: #f4f5f7;
+  --surface-raised: #ffffff;
+  --border: #e3e5e9;
+  --text: #1b1f24;
+  --text-muted: #6b7280;
+  --accent: #3b82f6;
+  --danger: #e5484d;
+  --success: #30a46c;
+  --warning: #f5a524;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --shadow-md: 0 8px 24px rgba(16, 24, 40, 0.08);
+  --gap: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+   Layout
+   --------------------------------------------------------------------------- */
+.app {
   display: flex;
   flex-direction: column;
+  /* Dynamic viewport units keep the board fully visible on mobile browsers
+     whose address bar collapses on scroll. */
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: var(--gap);
+  gap: var(--gap);
+  background-color: var(--surface);
+  color: var(--text);
+}
+
+.app__header {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
-h1 { margin-bottom: 10px; color: #333; }
-
-canvas {
-  border: 2px solid #333;
-  background-color: white;
-  border-radius: 8px;
-  cursor: crosshair;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+.app__titles {
+  min-width: 0;
 }
 
-.controls { margin-top: 15px; }
+.app__title {
+  margin: 0;
+  font-size: clamp(1.35rem, 1rem + 1.6vw, 1.9rem);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
 
-button {
-  padding: 10px 20px;
-  background-color: #ff4757;
-  color: white;
-  border: none;
-  border-radius: 5px;
+.app__subtitle {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.app__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--gap);
+  /* Lets the board shrink inside the flex column instead of overflowing. */
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Status
+   --------------------------------------------------------------------------- */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background-color: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.status__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  flex: none;
+}
+
+.status__dot--connected {
+  background-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(48, 164, 108, 0.18);
+}
+
+.status__dot--connecting {
+  background-color: var(--warning);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.status__dot--disconnected {
+  background-color: var(--danger);
+}
+
+.status__label {
+  font-weight: 600;
+}
+
+.status__meta {
+  overflow: hidden;
+  max-width: 22ch;
+  color: var(--text-muted);
+  text-overflow: ellipsis;
+}
+
+.status__meta::before {
+  content: "·";
+  margin-right: 8px;
+}
+
+.status__meta--error {
+  color: var(--danger);
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Toolbar
+   --------------------------------------------------------------------------- */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 20px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbar__group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Push board actions to the right on wide screens, keep them inline on narrow. */
+.toolbar__group:last-child {
+  margin-left: auto;
+}
+
+.swatch {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background-color: var(--swatch, var(--text));
+  box-shadow: inset 0 0 0 1px rgba(16, 24, 40, 0.12);
   cursor: pointer;
-  font-size: 16px;
+  transition: transform 120ms ease, box-shadow 120ms ease;
 }
 
-button:hover { background-color: #ff6b81; }
+.swatch:hover {
+  transform: scale(1.08);
+}
+
+.swatch--active {
+  border-color: var(--surface-raised);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.swatch--custom {
+  display: grid;
+  overflow: hidden;
+  place-items: center;
+  background: conic-gradient(#e5484d, #f5a524, #30a46c, #3b82f6, #8b5cf6, #e5484d);
+}
+
+/* The native colour input is the hit target; the swatch provides the visuals. */
+.swatch--custom input {
+  width: 200%;
+  height: 200%;
+  border: none;
+  background: none;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.field__label {
+  font-weight: 600;
+}
+
+.field input[type="range"] {
+  width: 120px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.field__value {
+  min-width: 2.5ch;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.button {
+  padding: 9px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--surface-raised);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease,
+    color 120ms ease;
+}
+
+.button:hover:not(:disabled) {
+  border-color: #cfd3da;
+  background-color: #f7f8fa;
+}
+
+.button--active {
+  border-color: var(--accent);
+  background-color: rgba(59, 130, 246, 0.1);
+  color: var(--accent);
+}
+
+.button--danger:hover:not(:disabled) {
+  border-color: var(--danger);
+  background-color: rgba(229, 72, 77, 0.1);
+  color: var(--danger);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------------
+   Board
+   --------------------------------------------------------------------------- */
+.board {
+  position: relative;
+  flex: 1;
+  min-height: 320px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background-color: #ffffff;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.board__canvas {
+  /* Pinned to the board's box rather than sized with height: 100%. A canvas has
+     an intrinsic aspect ratio from its width/height attributes, and when the
+     percentage height fails to resolve against the flex-sized parent that ratio
+     takes over — leaving the board a letterboxed strip instead of filling it. */
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  /* Without this, dragging on a touchscreen scrolls the page instead of drawing. */
+  touch-action: none;
+}
+
+.board__canvas--erasing {
+  cursor: cell;
+}
+
+.board__hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  padding: 0 16px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility helpers
+   --------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:where(button, input, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive
+   --------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --gap: 12px;
+  }
+
+  .app__subtitle {
+    font-size: 0.82rem;
+  }
+
+  .toolbar {
+    justify-content: center;
+    padding: 10px 12px;
+  }
+
+  /* Stacked layout reads better than a squeezed right-aligned action group. */
+  .toolbar__group:last-child {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .field input[type="range"] {
+    width: 96px;
+  }
+
+  .board {
+    min-height: 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
