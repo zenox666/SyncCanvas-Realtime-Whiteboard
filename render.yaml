@@ -1,0 +1,21 @@
+# Render Blueprint — deploys the SyncCanvas realtime server.
+#
+# In the Render dashboard: New > Blueprint, point it at this repository, and
+# these settings are applied automatically. CORS_ORIGIN is left unset here and
+# filled in from the dashboard once the frontend URL is known.
+services:
+  - type: web
+    name: sync-canvas-server
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      # Set to the deployed frontend origin, e.g. https://sync-canvas.vercel.app
+      # Left out of the blueprint so it can differ per environment.
+      - key: CORS_ORIGIN
+        sync: false
