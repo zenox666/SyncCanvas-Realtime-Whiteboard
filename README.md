@@ -6,7 +6,9 @@ same canvas, and every stroke appears on all connected devices as it is drawn.
 Built to solve a specific problem: explaining diagrams to friends while studying
 remotely, without screen-sharing a desktop drawing app.
 
-**Live demo:** _add your deployed URL here_ — open it in two windows to watch it sync.
+**Live demo:** [sync-canvas-realtime-whiteboard.vercel.app](https://sync-canvas-realtime-whiteboard.vercel.app) — open it in two windows to watch it sync.
+
+> The backend runs on a free tier that sleeps after inactivity, so the first load of the day may take up to a minute while the server wakes.
 
 ---
 
