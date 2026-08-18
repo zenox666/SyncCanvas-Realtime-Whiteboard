@@ -11,6 +11,7 @@ import cors from "cors";
 
 import { createBoard, sanitizeSegment } from "./lib/strokes.js";
 import { EVENTS } from "./lib/events.js";
+import { parseCorsOrigin } from "./lib/config.js";
 
 const PORT = Number(process.env.PORT) || 3001;
 
@@ -19,9 +20,7 @@ const PORT = Number(process.env.PORT) || 3001;
  * Defaults to "*" so the project runs with zero configuration; set
  * CORS_ORIGIN in production to lock the socket down to your own frontend.
  */
-const CORS_ORIGIN = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(",").map((origin) => origin.trim())
-  : "*";
+const CORS_ORIGIN = parseCorsOrigin(process.env.CORS_ORIGIN);
 
 const app = express();
 app.use(cors({ origin: CORS_ORIGIN }));
